@@ -19,7 +19,7 @@
                         <div class="col-4 col-sm-4 col-md-4">
                             <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 text-primary">
-                                    <img src="assets/logo/logo.jpg" alt="" style="width:100px; height:100px">CSHOP
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/lovekafe.appspot.com/o/files%2Flogo.jpg?alt=media&token=8e57b149-13d8-4b12-8b83-c01fa4ab5956" alt="" style="width:100px; height:100px">CSHOP
                                 </div>
                             </div>
                         </div>

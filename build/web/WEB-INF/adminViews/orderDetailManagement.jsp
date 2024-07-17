@@ -40,7 +40,7 @@
                 <main class="container" style="margin-top: 50px">
                     <div class="d-flex justify-content-between">
                         <span class="text-primary" style="font-weight: bold;">QUẢN LÝ CHI TIẾT ORDER</span>
-                        <div class="d-flex align-items-center">
+<!--                        <div class="d-flex align-items-center">
                             <label style="margin-right: 10px;" for="searchStartDate">Từ ngày:</label>
                             <input type="date" class="border rounded" style="margin-right: 10px; min-width: 150px; height: 40px;" value="${searchStartDate}" 
                                    id="searchStartDate" name="searchStartDate">
@@ -52,7 +52,7 @@
                                 <i class="fa-solid fa-magnifying-glass"></i>
                                 Tìm kiếm
                             </button>
-                        </div>
+                        </div>-->
                     </div>
                     <table class="table border" style="margin-top: 20px">
                         <thead> 

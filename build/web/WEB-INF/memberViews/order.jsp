@@ -79,6 +79,35 @@
                                                     onclick="showDetail('${item.id}')">
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </button>
+                                            <c:if test="${item.status == 'CANCEL'}">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" title="Trạng thái đang chờ xác nhận">
+                                                    <i class="fa-regular fa-circle-xmark"></i>
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${item.status == 'PENDDING'}">
+                                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="Trạng thái đang chờ xác nhận">
+                                                    <i class="fa-solid fa-spinner"></i>
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${item.status == 'DONE'}">
+                                                <button type="button" class="btn btn-success" data-toggle="tooltip" title="Trạng thái đơn hàng đã được xác nhận">
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                </button>
+                                            </c:if>
+
+                                            <c:if test="${item.status == 'CANCEL'}">
+                                                <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Đặt lại đơn hàng"
+                                                        data-bs-toggle="modal" data-bs-target="#ReOrderModal" onclick="reOrder('${item.id}')">
+                                                    <i class="fa-solid fa-rotate-right"></i>
+                                                </button>
+                                            </c:if>
+
+                                            <c:if test="${item.status == 'PENDDING'}">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" title="Huỷ đơn hàng"
+                                                        data-bs-toggle="modal" data-bs-target="#CancelModal" onclick="cancelOrder('${item.id}')">
+                                                    <i class="fa-regular fa-circle-xmark"></i>
+                                                </button>
+                                            </c:if>
                                         </div>
                                     </td>
                                 </tr>
@@ -88,11 +117,42 @@
                 </main>
             </div>
 
+            <jsp:include page="_footer.jsp"></jsp:include>
+
+            <!-- Search Modal -->
+            <div class="modal fade" id="SearchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="searchOrderForm" action="order" method="post">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="searchStartDateInput" name="searchStartDateInput" hidden="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="searchEndDateInput" name="searchEndDateInput" hidden="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="action" name="action" value="SEARCH" hidden="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                <button type="submit" class="btn btn-primary">Đồng ý</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <!-- show Order Detail Modal -->
             <div class="modal fade" id="ShowDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form id="ShowDetailForm" action="orderDetailManagement" method="post">
+                        <form id="ShowDetailForm" action="orderDetail" method="post">
                             <div class="modal-header bg-primary">
                                 <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -113,29 +173,98 @@
                     </div>
                 </div>
             </div>
-            <jsp:include page="_footer.jsp"></jsp:include>
+            
+            <!-- Cancel Modal -->
+            <div class="modal fade" id="CancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="order" method="post">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc chắn muốn huỷ đơn hàng này? <span id="delete-modal-body"></span>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="cancelOrderId" name="cancelOrderId" value="" hidden="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="action" name="action" value="CANCEL" hidden="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                <button type="submit" class="btn btn-primary">Đồng ý</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ReOrder Modal -->
+            <div class="modal fade" id="ReOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="order" method="post">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc chắn muốn huỷ đơn hàng này? <span id="delete-modal-body"></span>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="reOrderId" name="reOrderId" value="" hidden="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="action" name="action" value="RE-ORDER" hidden="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                <button type="submit" class="btn btn-primary">Đồng ý</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
             <script>
-                                                        debugger;
-                                                        $(document).ready(function () {
-                                                            $('[data-toggle="tooltip"]').tooltip();
-                                                        });
-
-                                                        setTimeout(function () {
-                                                            // Select all alerts with the 'alert' class
-                                                            var alerts = document.querySelectorAll('.alert');
-                                                            alerts.forEach(function (alert) {
-                                                                // Hide each alert
-                                                                $(alert).alert('close');
+                                                            debugger;
+                                                            $(document).ready(function () {
+                                                                $('[data-toggle="tooltip"]').tooltip();
                                                             });
-                                                        }, 2000);
 
-                                                        function showDetail(orderId) {
-                                                            document.getElementById('showOrderId').value = orderId;
-                                                            document.getElementById("ShowDetailForm").submit();
-                                                        }
+                                                            setTimeout(function () {
+                                                                // Select all alerts with the 'alert' class
+                                                                var alerts = document.querySelectorAll('.alert');
+                                                                alerts.forEach(function (alert) {
+                                                                    // Hide each alert
+                                                                    $(alert).alert('close');
+                                                                });
+                                                            }, 2000);
+
+                                                            function showDetail(orderId) {
+                                                                document.getElementById('showOrderId').value = orderId;
+                                                                document.getElementById("ShowDetailForm").submit();
+                                                            }
+
+                                                            function searchOrderByDate() {
+                                                                document.getElementById('searchStartDateInput').value = document.getElementById('searchStartDate').value;
+                                                                document.getElementById('searchEndDateInput').value = document.getElementById('searchEndDate').value;
+                                                                document.getElementById("searchOrderForm").submit();
+                                                            }
+                                                            
+                                                            function reOrder(orderId) {
+                                                                document.getElementById('reOrderId').value = orderId;
+                                                            }
+                                                            
+                                                            function cancelOrder(orderId) {
+                                                                document.getElementById('cancelOrderId').value = orderId;
+                                                            }
+
             </script>
     </body>
 </html>

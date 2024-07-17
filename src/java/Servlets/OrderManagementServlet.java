@@ -7,7 +7,9 @@ package Servlets;
 import DAOs.OrderDAO;
 import DAOs.ProductDAO;
 import DAOs.ProductDetailDAO;
+import DAOs.UserDAO;
 import Models.ProductDetail;
+import Models.User;
 import Services.UploadService;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 //import java.sql.Date;
 import java.util.logging.Level;
@@ -124,9 +127,29 @@ public class OrderManagementServlet extends HttpServlet {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     Date searchStartDateInput = dateFormat.parse(request.getParameter("searchStartDateInput"));
                     Date searchEndDateInput = dateFormat.parse(request.getParameter("searchEndDateInput"));
-                    request.setAttribute("Orders", OrderDAO.searchOrder(new java.sql.Date(searchStartDateInput.getTime()), new java.sql.Date(searchEndDateInput.getTime())));
+                    //cong 1 ngay cho enđate
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(searchEndDateInput);
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    Date newSearchEndDateInput = calendar.getTime();
+
+                    request.setAttribute("Orders", OrderDAO.searchOrder(new java.sql.Date(searchStartDateInput.getTime()), new java.sql.Date(newSearchEndDateInput.getTime())));
                     request.setAttribute("searchStartDate", LocalDate.parse(request.getParameter("searchStartDateInput"), formatter));
                     request.setAttribute("searchEndDate", LocalDate.parse(request.getParameter("searchEndDateInput"), formatter));
+                    break;
+                case "CONFIRM":
+                    long confirmOrderId = Long.parseLong(request.getParameter("confirmOrderId"));
+                    boolean confirmOrderRs = OrderDAO.confirmOrder(confirmOrderId);
+                    if (confirmOrderRs) {
+                        request.setAttribute("STATUS", "SUCCESS");
+                        request.setAttribute("MESSAGE", "Xác nhận đơn hàng thành công");
+                    } else {
+                        request.setAttribute("STATUS", "ERROR");
+                        request.setAttribute("MESSAGE", "Xác nhận đơn hàng thất bại");
+                    }
+                    request.setAttribute("Orders", OrderDAO.getAllOrder());
+                    request.setAttribute("searchStartDate", LocalDate.now().minusMonths(1));
+                    request.setAttribute("searchEndDate", LocalDate.now());
                     break;
                 default:
                     break;

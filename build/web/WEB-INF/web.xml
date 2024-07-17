@@ -82,6 +82,14 @@
         <servlet-name>AddToCartServlet</servlet-name>
         <servlet-class>Servlets.AddToCartServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OrderDetailMemServlet</servlet-name>
+        <servlet-class>Servlets.OrderDetailMemServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>forgotPasswordServlet</servlet-name>
+        <servlet-class>Servlets.forgotPasswordServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -149,6 +157,14 @@
     <servlet-mapping>
         <servlet-name>AddToCartServlet</servlet-name>
         <url-pattern>/AddToCartServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderDetailMemServlet</servlet-name>
+        <url-pattern>/OrderDetailMemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>forgotPasswordServlet</servlet-name>
+        <url-pattern>/forgotPasswordServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

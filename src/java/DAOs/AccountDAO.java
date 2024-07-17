@@ -39,6 +39,24 @@ public class AccountDAO {
         return null;
     }
     
+    public static Account getAccountByUsername(String username) throws SQLException, ClassNotFoundException {
+
+        String sql = "Select * from dboAccount a " //
+                + " where a.username = ?";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, username);
+        ResultSet rs = pstm.executeQuery();
+
+        if (rs.next()) {
+            Account account = new Account(rs.getLong("Id"), rs.getString("username"), rs.getString("password"),
+                    rs.getString("role"), rs.getBoolean("isActive"), rs.getBoolean("isDelete"));
+            return account;
+        }
+        return null;
+    }
+    
     public static boolean findAccountByUsername(String userName) throws SQLException, ClassNotFoundException {
 
         String sql = "Select * from dboAccount a " //

@@ -44,14 +44,16 @@
                 </div>
                 <div class="row g-3" style="margin-top: 20px">
                     <c:forEach var="item" items="${Categories}" varStatus="loop">
-                        <div class="hover-item col-2 card">
-                            <a href="${pageContext.request.contextPath}/product/${item.id}">
-                                <img src="assets/uploads/${item.pictureUrl}" class="img-thumbnail card-img-top" style=" height: 150px" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title text-center">${item.name}</h5>
+                        <c:if test = "${loop.index < 6}">
+                                <div class="hover-item col-2 card">
+                                    <a href="${pageContext.request.contextPath}/product/${item.id}">
+                                        <img src="assets/uploads/${item.pictureUrl}" class="img-thumbnail card-img-top" style=" height: 150px" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">${item.name}</h5>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
+                            </c:if>
                     </c:forEach>
                 </div>
                 </c:if>

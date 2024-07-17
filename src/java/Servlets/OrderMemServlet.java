@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,7 +91,7 @@ public class OrderMemServlet extends HttpServlet {
                     long addProductDetailId = Long.parseLong(request.getParameter("orderProductDetailId"));
                     User addUser = UserDAO.getUserByUsername(addUsername);
                     Order addOrder = new Order(1, LocalDateTime.now(), addTotalPrice, addDescription, addUser.getId(), false, "PENDDING");
-                    OrderDetail addOrderDetail = new OrderDetail(1, 1, addProductDetailId, addQuantity, addPrice , "");
+                    OrderDetail addOrderDetail = new OrderDetail(1, 1, addProductDetailId, addQuantity, addPrice, "");
                     long deleteAddToCart = Long.parseLong(request.getParameter("orderAddToCartId"));
                     boolean addOrderRs = OrderDAO.orderProduct(addOrder, addOrderDetail);
                     boolean deleteAddToCartRs = AddToCartDAO.deleteAddToCart(deleteAddToCart);
@@ -109,9 +110,45 @@ public class OrderMemServlet extends HttpServlet {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     Date searchStartDateInput = dateFormat.parse(request.getParameter("searchStartDateInput"));
                     Date searchEndDateInput = dateFormat.parse(request.getParameter("searchEndDateInput"));
-                    request.setAttribute("Orders", OrderDAO.searchOrder(new java.sql.Date(searchStartDateInput.getTime()), new java.sql.Date(searchEndDateInput.getTime())));
+                    //cong 1 ngay cho enđate
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(searchEndDateInput);
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    Date newSearchEndDateInput = calendar.getTime();
+
+                    request.setAttribute("Orders", OrderDAO.searchOrder(new java.sql.Date(searchStartDateInput.getTime()), new java.sql.Date(newSearchEndDateInput.getTime())));
                     request.setAttribute("searchStartDate", LocalDate.parse(request.getParameter("searchStartDateInput"), formatter));
                     request.setAttribute("searchEndDate", LocalDate.parse(request.getParameter("searchEndDateInput"), formatter));
+                    break;
+                case "CANCEL":
+                    long cancelOrderId = Long.parseLong(request.getParameter("cancelOrderId"));
+                    boolean cancelOrderRs = OrderDAO.cancelOrder(cancelOrderId);
+                    if (cancelOrderRs) {
+                        request.setAttribute("STATUS", "SUCCESS");
+                        request.setAttribute("MESSAGE", "Huỷ đơn hàng thành công");
+                    } else {
+                        request.setAttribute("STATUS", "ERROR");
+                        request.setAttribute("MESSAGE", "Huỷ đơn hàng thất bại");
+                    }
+                    User cancelUser = UserDAO.getUserByUsername(userNameGlo);
+                    request.setAttribute("Orders", OrderDAO.getOrderByUserId(cancelUser.getId()));
+                    request.setAttribute("searchStartDate", LocalDate.now().minusMonths(1));
+                    request.setAttribute("searchEndDate", LocalDate.now());
+                    break;
+                case "RE-ORDER":
+                    long reOrderId = Long.parseLong(request.getParameter("reOrderId"));
+                    boolean reOrderRs = OrderDAO.reOrder(reOrderId);
+                    if (reOrderRs) {
+                        request.setAttribute("STATUS", "SUCCESS");
+                        request.setAttribute("MESSAGE", "Đặt lại đơn hàng thành công");
+                    } else {
+                        request.setAttribute("STATUS", "ERROR");
+                        request.setAttribute("MESSAGE", "Đặt lại đơn hàng thất bại");
+                    }
+                    User reOrderuser = UserDAO.getUserByUsername(userNameGlo);
+                    request.setAttribute("Orders", OrderDAO.getOrderByUserId(reOrderuser.getId()));
+                    request.setAttribute("searchStartDate", LocalDate.now().minusMonths(1));
+                    request.setAttribute("searchEndDate", LocalDate.now());
                     break;
                 default:
                     break;

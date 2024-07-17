@@ -35,6 +35,9 @@
                                     <input type="checkbox" id="showPassword" >
                                     <span>Hiển thị mật khẩu</span>
                                 </div>
+                                <a href="${pageContext.request.contextPath}/forgotPassword">
+                                    Quên mật khẩu
+                                </a>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <button type="submit" class="btn btn-primary btn-block mt-2">Đăng nhập</button>
                                     <a href="${pageContext.request.contextPath}/register">

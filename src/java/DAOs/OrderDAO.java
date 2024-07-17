@@ -29,7 +29,7 @@ public class OrderDAO {
         String sql = "Select ord.*, us.fullName as usFullName, us.email as usEmail from dboOrder as ord" //
                 + " join dboUser as us on ord.userId = us.id"//
                 + " join dboAccount as ac on us.AccountId = ac.id"//
-                + " where ac.isDelete = 0";
+                + " where ac.isDelete = 0 and ord.isDelete = 0";
 
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);
@@ -52,7 +52,7 @@ public class OrderDAO {
         String sql = "Select ord.*, us.fullName as usFullName, us.email as usEmail from dboOrder as ord" //
                 + " join dboUser as us on ord.userId = us.id"//
                 + " join dboAccount as ac on us.AccountId = ac.id"//
-                + " where ac.isDelete = 0 and ord.userId = ?";
+                + " where ac.isDelete = 0 and ord.isDelete = 0 and ord.userId = ?";
 
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);
@@ -130,7 +130,7 @@ public class OrderDAO {
         String sql = "Select ord.*, us.fullName as usFullName, us.email as usEmail from dboOrder as ord" //
                 + " join dboUser as us on ord.userId = us.id"//
                 + " join dboAccount as ac on us.AccountId = ac.id"//
-                + " where ac.isDelete = 0 and ord.orderAt >= ? and ord.orderAt <= ?";
+                + " where ac.isDelete = 0 and ord.isDelete = 0 and ord.orderAt >= ? and ord.orderAt <= ?";
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);
         pstm.setTimestamp(1, new Timestamp(startDate.getTime()));
@@ -148,5 +148,54 @@ public class OrderDAO {
         }
         return orders;
     }
+    
+    
+    public static boolean cancelOrder(long orderId) throws SQLException, ClassNotFoundException {
 
+        String sql = "update dboOrder" //
+                + " set status = ?"
+                + " where id = ?";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, "CANCEL");
+        pstm.setLong(2, orderId);
+
+        int rowsInserted = pstm.executeUpdate();
+
+        return rowsInserted > 0;
+    }
+    
+    public static boolean reOrder(long orderId) throws SQLException, ClassNotFoundException {
+
+        String sql = "update dboOrder" //
+                + " set status = ?"
+                + " where id = ?";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, "PENDDING");
+        pstm.setLong(2, orderId);
+
+        int rowsInserted = pstm.executeUpdate();
+
+        return rowsInserted > 0;
+    }
+    
+    public static boolean confirmOrder(long orderId) throws SQLException, ClassNotFoundException {
+
+        String sql = "update dboOrder" //
+                + " set status = ?"
+                + " where id = ?";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, "DONE");
+        pstm.setLong(2, orderId);
+
+        int rowsInserted = pstm.executeUpdate();
+
+        return rowsInserted > 0;
+    }
+        
 }
