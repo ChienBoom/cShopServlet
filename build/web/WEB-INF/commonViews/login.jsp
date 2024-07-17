@@ -31,7 +31,17 @@
                                     <label for="password">Mật khẩu</label>
                                     <input type="password" class="form-control" id="password" name="password" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-block mt-2">Đăng nhập</button>
+                                <div>
+                                    <input type="checkbox" id="showPassword" >
+                                    <span>Hiển thị mật khẩu</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <button type="submit" class="btn btn-primary btn-block mt-2">Đăng nhập</button>
+                                    <a href="${pageContext.request.contextPath}/register">
+                                        Chưa có tài khoản. Đi đăng ký
+                                    </a>
+                                </div>
+
                             </form>
                             <% if (request.getAttribute("STATUS") == "ERROR") {%>
                             <div class="alert alert-danger mt-3" role="alert">
@@ -43,7 +53,23 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const showPasswordCheckbox = document.getElementById('showPassword');
+                const passwordInput = document.getElementById('password');
+
+                showPasswordCheckbox.addEventListener('change', function () {
+                    if (showPasswordCheckbox.checked) {
+                        passwordInput.type = 'text';
+                    } else {
+                        passwordInput.type = 'password';
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

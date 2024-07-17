@@ -18,6 +18,8 @@ public class OrderDetail {
     private int Quantity;
     private BigDecimal TotalPrice;
     private String Description;
+    private Order Order;
+    private ProductDetail ProductDetail;
 
     public OrderDetail() {
     }
@@ -81,4 +83,22 @@ public class OrderDetail {
     public void setDescription(String description) {
         this.Description = description;
     }
+
+    public Order getOrder() {
+        return Order;
+    }
+
+    public void setOrder(Order Order) {
+        this.Order = Order;
+    }
+
+    public ProductDetail getProductDetail() {
+        return ProductDetail;
+    }
+
+    public void setProductDetail(ProductDetail ProductDetail) {
+        this.ProductDetail = ProductDetail;
+    }
+    
+    
 }

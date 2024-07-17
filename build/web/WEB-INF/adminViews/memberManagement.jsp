@@ -18,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <body class="d-flex flex-column min-vh-100">
         <jsp:include page="_header.jsp"></jsp:include>
-            <div class="flex-fill" style="padding-top: 56px">
+            <div class="flex-fill" style="padding-top: 56px; background-color: #f5f5f5">
             <c:if test="${STATUS == 'SUCCESS'}">
                 <div class="alert alert-primary position-fixed top-1 end-0 p-3" role="alert" style="width: 400px">
                     <div class="d-flex justify-content-between">

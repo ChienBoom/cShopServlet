@@ -18,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <body class="d-flex flex-column min-vh-100">
         <jsp:include page="_header.jsp"></jsp:include>
-            <div class="flex-fill" style="padding-top: 56px">
+            <div class="flex-fill" style="padding-top: 56px; background-color: #f5f5f5">
             <c:if test="${STATUS == 'SUCCESS'}">
                 <div class="alert alert-primary position-fixed top-1 end-0 p-3" role="alert" style="width: 400px">
                     <div class="d-flex justify-content-between">
@@ -76,8 +76,7 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-1">
                                             <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Xem chi tiết"
-                                                    data-bs-toggle="modal" data-bs-target="#EditModal" 
-                                                    onclick="OrderDetail('${item.id}')">
+                                                    onclick="showDetail('${item.id}')">
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </button>
                                         </div>
@@ -89,24 +88,21 @@
                 </main>
             </div>
 
-            <!-- Search Modal -->
-            <div class="modal fade" id="SearchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- show Order Detail Modal -->
+            <div class="modal fade" id="ShowDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form id="searchOrderForm" action="orderManagement" method="post">
+                        <form id="ShowDetailForm" action="orderDetailManagement" method="post">
                             <div class="modal-header bg-primary">
                                 <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="searchStartDateInput" name="searchStartDateInput" hidden="">
+                                    <input type="text" class="form-control" id="showOrderId" name="showOrderId" hidden="">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="searchEndDateInput" name="searchEndDateInput" hidden="">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="action" name="action" value="SEARCH" hidden="">
+                                    <input type="text" class="form-control" id="action" name="action" value="SHOW-ORDER-DETAIL" hidden="">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -117,34 +113,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Delete Modal -->
-            <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="productDetailManagement" method="post">
-                            <div class="modal-header bg-primary">
-                                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Bạn có chắc chắn muốn xoá sản phẩm này?
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="deleteId" name="deleteId" value="" hidden="">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="action" name="action" value="DELETE" hidden="">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-                                <button type="submit" class="btn btn-primary">Đồng ý</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
             <jsp:include page="_footer.jsp"></jsp:include>
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -164,14 +132,9 @@
                                                             });
                                                         }, 2000);
 
-                                                        function OrderDetail(deleteId) {
-                                                            document.getElementById('deleteId').value = deleteId;
-                                                        }
-
-                                                        function searchOrderByDate() {
-                                                            document.getElementById('searchStartDateInput').value = document.getElementById('searchStartDate').value;
-                                                            document.getElementById('searchEndDateInput').value = document.getElementById('searchEndDate').value;
-                                                            document.getElementById("searchOrderForm").submit();
+                                                        function showDetail(orderId) {
+                                                            document.getElementById('showOrderId').value = orderId;
+                                                            document.getElementById("ShowDetailForm").submit();
                                                         }
             </script>
     </body>

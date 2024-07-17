@@ -44,11 +44,29 @@ public class ProductMemServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         try {
             String[] pathParts = pathInfo.split("/");
-            String categoryId = pathParts[1];
             RequestDispatcher dispatcher;
-            if(roleUser == null) dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/products.jsp");
-            else dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/products.jsp");
-            request.setAttribute("Products", ProductDAO.getProductsByCategoryId(Long.parseLong(categoryId)));
+            if (pathParts.length < 1) {
+                if (roleUser == null) {
+                    dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/products.jsp");
+
+                } else {
+                    dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/products.jsp");
+                }
+                request.setAttribute("Products", ProductDAO.getAllProduct());
+                request.setAttribute("Categories", CategoryDAO.getAllCategory());
+                request.setAttribute("searchCategoryId", 999);
+            } else {
+                String categoryId = pathParts[1];
+
+                if (roleUser == null) {
+                    dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/products.jsp");
+                } else {
+                    dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/products.jsp");
+                }
+                request.setAttribute("Products", ProductDAO.getProductsByCategoryId(Long.parseLong(categoryId)));
+                request.setAttribute("Categories", CategoryDAO.getAllCategory());
+                request.setAttribute("searchCategoryId", categoryId);
+            }
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         } catch (Exception e) {
@@ -64,88 +82,23 @@ public class ProductMemServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            RequestDispatcher dispatcher;
+            if (roleUser == null) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/products.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/products.jsp");
+            }
             switch (action) {
-                case "ADD":
-                    // Lấy thông tin file
-                    Part picture = request.getPart("addProPicture");
-                    UploadService uploadService = new UploadService();
-                    String fileName = uploadService.UploadPicture(request, picture);
-
-                    Product product = new Product(1, request.getParameter("addProName"), fileName,
-                            Integer.parseInt(request.getParameter("addProQuanSold")), Integer.parseInt(request.getParameter("addProQuanStock")),
-                            request.getParameter("addProDesc").trim(), Long.parseLong(request.getParameter("addProCateId")), false);
-                    boolean addProduct = ProductDAO.addProduct(product);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    request.setAttribute("searchInput", "");
-                    request.setAttribute("searchCategoryId", 999);
-                    if (addProduct) {
-                        request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thành công");
-                    } else {
-                        request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thất bại");
-                    }
-                    break;
-                case "EDIT":
-                    // Lấy thông tin file
-                    Part editPicture = request.getPart("editProPicture");
-                    String editFileName = "NULL";
-                    if (!editPicture.getName().equals("")) {
-                        UploadService editUploadService = new UploadService();
-                        editFileName = editUploadService.UploadPicture(request, editPicture);
-                    }
-                    Product editProduct = new Product(Long.parseLong(request.getParameter("editProId")), request.getParameter("editProName"), editFileName,
-                            Integer.parseInt(request.getParameter("editProQuanSold")), Integer.parseInt(request.getParameter("editProQuanStock")),
-                            request.getParameter("editProDesc").trim(), Long.parseLong(request.getParameter("editProCateId")), false);
-                    boolean editPro = ProductDAO.updateProduct(editProduct);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    request.setAttribute("searchInput", "");
-                    request.setAttribute("searchCategoryId", 999);
-                    if (editPro) {
-                        request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Sửa thông tin sản phẩm thành công");
-                    } else {
-                        request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Sửa thông tin sản phẩm thất bại");
-                    }
-                    break;
                 case "SEARCH":
-                    String searchInput = request.getParameter("searchProductInput").trim();
+                    String searchInput = request.getParameter("searchInput").trim();
                     long searchCategoryIdInput = Long.parseLong(request.getParameter("searchCategoryIdInput"));
                     request.setAttribute("Products", ProductDAO.searchProduct(searchInput, searchCategoryIdInput));
                     request.setAttribute("Categories", CategoryDAO.getAllCategory());
                     request.setAttribute("searchInput", searchInput);
                     request.setAttribute("searchCategoryId", searchCategoryIdInput);
-                    break;
-                case "SHOW-PRODUCT-CATEGORY":
-                    long showProCateId = Long.parseLong(request.getParameter("showProCateId"));
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getProductsByCategoryId(showProCateId));
-                    request.setAttribute("searchInput", "");
-                    request.setAttribute("searchCategoryId", 999);
-                    break;
-                case "DELETE":
-                    long deleteProId;
-                    boolean deleteProduct = false;
-                    String deleteProIdPara = request.getParameter("deleteProId");
-                    deleteProId = Long.parseLong(deleteProIdPara);
-                    deleteProduct = ProductDAO.deleteProduct(deleteProId);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    request.setAttribute("searchInput", "");
-                    request.setAttribute("searchCategoryId", 999);
-                    if (deleteProduct) {
-                        request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Xoá sản phẩm thành công");
-                    } else {
-                        request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Xoá sản phẩm thất bại");
-                    }
                     break;
                 default:
                     break;
@@ -156,7 +109,7 @@ public class ProductMemServlet extends HttpServlet {
         } catch (Exception e) {
             try {
                 System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
                 request.setAttribute("Categories", CategoryDAO.getAllCategory());
                 request.setAttribute("Products", ProductDAO.getAllProduct());
                 request.setAttribute("searchInput", "");

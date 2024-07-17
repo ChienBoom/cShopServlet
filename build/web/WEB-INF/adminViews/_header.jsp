@@ -26,7 +26,7 @@
                             <a class="nav-link text-light" href="${pageContext.request.contextPath}/productManagement">Sản phẩm</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="${pageContext.request.contextPath}/order">Order</a>
+                            <a class="nav-link text-light" href="${pageContext.request.contextPath}/orderManagement">Order</a>
                         </li>
                     </ul>
                 </div>

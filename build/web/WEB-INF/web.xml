@@ -58,6 +58,30 @@
         <servlet-name>ProductMemServlet</servlet-name>
         <servlet-class>Servlets.ProductMemServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OrderDetailManagementServlet</servlet-name>
+        <servlet-class>Servlets.OrderDetailManagementServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CategoryMemServlet</servlet-name>
+        <servlet-class>Servlets.CategoryMemServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductDetailMemServlet</servlet-name>
+        <servlet-class>Servlets.ProductDetailMemServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RevenueManagement</servlet-name>
+        <servlet-class>Servlets.RevenueManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderMemServlet</servlet-name>
+        <servlet-class>Servlets.OrderMemServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <servlet-class>Servlets.AddToCartServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -101,6 +125,30 @@
     <servlet-mapping>
         <servlet-name>ProductMemServlet</servlet-name>
         <url-pattern>/ProductMemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderDetailManagementServlet</servlet-name>
+        <url-pattern>/OrderDetailManagementServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategoryMemServlet</servlet-name>
+        <url-pattern>/CategoryMemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDetailMemServlet</servlet-name>
+        <url-pattern>/ProductDetailMemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RevenueManagement</servlet-name>
+        <url-pattern>/RevenueManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderMemServlet</servlet-name>
+        <url-pattern>/OrderMemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <url-pattern>/AddToCartServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

@@ -6,11 +6,12 @@ package Servlets;
 
 import DAOs.CategoryDAO;
 import DAOs.ProductDAO;
+import DAOs.UserDAO;
 import Models.Product;
+import Models.User;
 import Services.UploadService;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,16 +42,22 @@ public class ProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
-//            HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
-            request.setAttribute("Categories", CategoryDAO.getAllCategory());
-            request.setAttribute("Products", ProductDAO.getAllProduct());
+            RequestDispatcher dispatcher;
+            if (roleUser == null) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else if (roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/profile.jsp");
+            }
+            request.setAttribute("User", UserDAO.getUserByUsername(userNameGlo));
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/profile.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -62,7 +70,7 @@ public class ProfileServlet extends HttpServlet {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
         try {
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
             switch (action) {
                 case "ADD":
                     // Lấy thông tin file
@@ -85,62 +93,55 @@ public class ProfileServlet extends HttpServlet {
                     }
                     break;
                 case "EDIT":
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     // Lấy thông tin file
-                    Part editPicture = request.getPart("editProPicture");
+                    Part editPicture = request.getPart("editUserPicture");
                     String editFileName = "NULL";
-                    if (editPicture.getName().equals("")) {
+                    if (editPicture.getSubmittedFileName() != null && !editPicture.getSubmittedFileName().isEmpty()) {
                         UploadService editUploadService = new UploadService();
                         editFileName = editUploadService.UploadPicture(request, editPicture);
                     }
-                    Product editProduct = new Product(Long.parseLong(request.getParameter("editProId")), request.getParameter("editProName"), editFileName,
-                            Integer.parseInt(request.getParameter("editProQuanSold")), Integer.parseInt(request.getParameter("editProQuanStock")),
-                            request.getParameter("editProDesc").trim(), Long.parseLong(request.getParameter("editProCateId")), false);
-                    boolean editPro = ProductDAO.updateProduct(editProduct);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    if (editPro) {
+                    User editUser = new User(1, request.getParameter("editFullName"), request.getParameter("editEmail"), request.getParameter("editSex"),
+                            request.getParameter("editAddress"), editFileName, dateFormat.parse(request.getParameter("editDOB")), 1);
+                    editUser.setUsername(request.getParameter("editUsername"));
+                    boolean editUs = UserDAO.updateProfile(editUser);
+
+                    if (editUs) {
                         request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Sửa thông tin sản phẩm thành công");
+                        request.setAttribute("MESSAGE", "Cập nhật thông tin thành công");
                     } else {
                         request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Sửa thông tin sản phẩm thất bại");
+                        request.setAttribute("MESSAGE", "Cập nhật thông tin thất bại");
                     }
                     break;
-                case "SEARCH":
-                    String searchInput = request.getParameter("searchProductInput").trim();
-                        request.setAttribute("Products", ProductDAO.searchProduct(searchInput,999));
-                    break;
-                case "SHOW-PRODUCT-CATEGORY":
-                    long showProCateId = Long.parseLong(request.getParameter("showProCateId"));
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getProductsByCategoryId(showProCateId));
-                    break;
-                case "DELETE":
-                    long deleteProId;
-                    boolean deleteProduct = false;
-                    String deleteProIdPara = request.getParameter("deleteProId");
-                    deleteProId = Long.parseLong(deleteProIdPara);
-                    deleteProduct = ProductDAO.deleteProduct(deleteProId);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    if (deleteProduct) {
+                case "CHANGE-AVATAR":
+                    Part changePicture = request.getPart("changePicture");
+                    UploadService changeUploadService = new UploadService();
+                    String changeFileName = changeUploadService.UploadPicture(request, changePicture);
+                    User changeUser = new User();
+                    System.out.println("username: " + request.getParameter("changeUsername"));
+                    changeUser.setUsername(request.getParameter("changeUsername"));
+                    changeUser.setPictureUrl(changeFileName);
+                    boolean changeUs = UserDAO.changeAvatar(changeUser);
+                    if (changeUs) {
                         request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Xoá sản phẩm thành công");
+                        request.setAttribute("MESSAGE", "Cập nhật ảnh đại diện thành công");
                     } else {
                         request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Xoá sản phẩm thất bại");
+                        request.setAttribute("MESSAGE", "Cập nhật ảnh đại diện thất bại");
                     }
                     break;
                 default:
                     break;
             }
+            request.setAttribute("User", UserDAO.getUserByUsername(userNameGlo));
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             try {
                 System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
                 request.setAttribute("Categories", CategoryDAO.getAllCategory());
                 request.setAttribute("Products", ProductDAO.getAllProduct());
                 request.setAttribute("STATUS", "ERROR");

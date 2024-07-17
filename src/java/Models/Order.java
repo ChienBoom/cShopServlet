@@ -5,6 +5,7 @@
 package Models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -14,24 +15,26 @@ import java.util.Date;
 public class Order {
 
     private long Id;
-    private Date OrderAt;
+    private LocalDateTime OrderAt;
     private BigDecimal TotalPrice;
     private String Description;
     private long UserId;
     private boolean IsDelete;
+    private String Status;
     private User User;
 
     public Order() {
 
     }
 
-    public Order(long id, Date orderAt, BigDecimal totalPrice, String description, long userId, boolean isDelete) {
-        this.Id = id;
-        this.OrderAt = orderAt;
-        this.TotalPrice = totalPrice;
-        this.Description = description;
-        this.UserId = userId;
-        this.IsDelete = isDelete;
+    public Order(long Id, LocalDateTime OrderAt, BigDecimal TotalPrice, String Description, long UserId, boolean IsDelete, String Status) {
+        this.Id = Id;
+        this.OrderAt = OrderAt;
+        this.TotalPrice = TotalPrice;
+        this.Description = Description;
+        this.UserId = UserId;
+        this.IsDelete = IsDelete;
+        this.Status = Status;
     }
 
     // Getter and Setter for Id
@@ -40,11 +43,11 @@ public class Order {
     }
 
     // Getter and Setter for OrderAt
-    public Date getOrderAt() {
+    public LocalDateTime getOrderAt() {
         return OrderAt;
     }
 
-    public void setOrderAt(Date orderAt) {
+    public void setOrderAt(LocalDateTime orderAt) {
         this.OrderAt = orderAt;
     }
 
@@ -89,6 +92,14 @@ public class Order {
 
     public void setUser(User User) {
         this.User = User;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String Status) {
+        this.Status = Status;
     }
     
 }

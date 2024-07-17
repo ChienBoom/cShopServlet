@@ -63,6 +63,7 @@ public class HomeServlet extends HttpServlet {
                     request.setAttribute("USERNAME", userNameGlo);
                     request.setAttribute("Categories", CategoryDAO.getAllCategory());
                     request.setAttribute("Products", ProductDAO.getAllProduct());
+                    request.setAttribute("SEARCH", "FALSE");
                     dispatcher.forward(request, response);
                 }
             }

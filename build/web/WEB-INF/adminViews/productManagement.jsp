@@ -18,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <body class="d-flex flex-column min-vh-100">
         <jsp:include page="_header.jsp"></jsp:include>
-            <div class="flex-fill" style="padding-top: 56px">
+            <div class="flex-fill" style="padding-top: 56px; background-color: #f5f5f5">
             <c:if test="${STATUS == 'SUCCESS'}">
                 <div class="alert alert-primary position-fixed top-1 end-0 p-3" role="alert" style="width: 400px">
                     <div class="d-flex justify-content-between">
@@ -95,7 +95,8 @@
                                     <td><img src="assets/uploads/${item.pictureUrl}" class="img-thumbnail" style="width: 100px; height: 100px" alt="..."></td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-1">
-                                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Chi tiết sản phẩm của danh mục" disabled="true">
+                                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Chi tiết sản phẩm của danh mục"
+                                                    onclick="showDetail('${item.id}')">
                                                 <i class="fa-solid fa-circle-check"></i>
                                             </button>
                                             <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Sửa"
@@ -280,6 +281,32 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- show Product Detail Modal -->
+            <div class="modal fade" id="ShowDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="ShowDetailForm" action="productDetailManagement" method="post">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="showProductId" name="showProductId" hidden="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="action" name="action" value="SHOW-PRODUCT-DETAIL" hidden="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                <button type="submit" class="btn btn-primary">Đồng ý</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <jsp:include page="_footer.jsp"></jsp:include>
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -300,10 +327,10 @@
                                                             });
                                                         }, 2000);
 
-//                                                        function categoryDetail(accountId, username) {
-//                                                            document.getElementById('ban-modal-body').textContent = username;
-//                                                            document.getElementById('banAccountId').value = accountId;
-//                                                        }
+                                                        function showDetail(productId) {
+                                                            document.getElementById('showProductId').value = productId;
+                                                            document.getElementById("ShowDetailForm").submit();
+                                                        }
 //
                                                         function editProduct(id, name, categoryId, quantitySold, quantityStock, description) {
                                                             document.getElementById('editProId').value = id;

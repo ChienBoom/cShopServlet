@@ -6,17 +6,15 @@ package DAOs;
 
 import Connection.ConnectionUtil;
 import Models.Order;
-import Models.Product;
-import Models.ProductDetail;
+import Models.OrderDetail;
 import Models.User;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,8 @@ public class OrderDAO {
         ResultSet rs = pstm.executeQuery();
         List<Order> orders = new ArrayList<Order>();
         while (rs.next()) {
-            Order order = new Order(rs.getLong("id"), rs.getTimestamp("orderAt"), rs.getBigDecimal("totalPrice"), rs.getString("description"), rs.getLong("userId"), rs.getBoolean("isDelete"));
+            Order order = new Order(rs.getLong("id"), rs.getTimestamp("orderAt").toLocalDateTime(), rs.getBigDecimal("totalPrice"), rs.getString("description"),
+                    rs.getLong("userId"), rs.getBoolean("isDelete"), rs.getString("status"));
             User user = new User();
             user.setFullName(rs.getString("usFullName"));
             user.setEmail(rs.getString("usEmail"));
@@ -61,7 +60,8 @@ public class OrderDAO {
         ResultSet rs = pstm.executeQuery();
         List<Order> orders = new ArrayList<Order>();
         while (rs.next()) {
-            Order order = new Order(rs.getLong("id"), rs.getDate("orderAt"), rs.getBigDecimal("totalPrice"), rs.getString("description"), rs.getLong("userId"), rs.getBoolean("isDelete"));
+            Order order = new Order(rs.getLong("id"), rs.getTimestamp("orderAt").toLocalDateTime(), rs.getBigDecimal("totalPrice"), rs.getString("description"),
+                    rs.getLong("userId"), rs.getBoolean("isDelete"), rs.getString("status"));
             User user = new User();
             user.setFullName(rs.getString("usFullName"));
             user.setEmail(rs.getString("usEmail"));
@@ -73,20 +73,56 @@ public class OrderDAO {
 
     public static boolean addOrder(Order order) throws SQLException, ClassNotFoundException {
 
-        String sql = "insert into dboOrder(orderAt, totalPrice, description, userId, isDelete) " //
-                + " values (?, ?, ?, ?, ?)";
+        String sql = "insert into dboOrder(orderAt, totalPrice, description, userId, isDelete, status) " //
+                + " values (?, ?, ?, ?, ?, ?)";
 
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setDate(1, (Date) order.getOrderAt());
+        pstm.setTimestamp(1, Timestamp.valueOf(order.getOrderAt()));
         pstm.setBigDecimal(2, order.getTotalPrice());
         pstm.setString(3, order.getDescription());
         pstm.setLong(4, order.getUserId());
         pstm.setBoolean(5, order.getIsDelete());
+        pstm.setString(6, order.getStatus());
 
         int rowsInserted = pstm.executeUpdate();
 
         return rowsInserted > 0;
+    }
+
+    public static boolean orderProduct(Order order, OrderDetail orderDetail) throws SQLException, ClassNotFoundException {
+
+        String sql = "insert into dboOrder(orderAt, totalPrice, description, userId, isDelete, status) " //
+                + " values (?, ?, ?, ?, ?, ?)";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        pstm.setTimestamp(1, Timestamp.valueOf(order.getOrderAt()));
+        pstm.setBigDecimal(2, order.getTotalPrice());
+        pstm.setString(3, order.getDescription());
+        pstm.setLong(4, order.getUserId());
+        pstm.setBoolean(5, order.getIsDelete());
+        pstm.setString(6, order.getStatus());
+
+        int rowsInserted = pstm.executeUpdate();
+
+        if (rowsInserted > 0) {
+            try (ResultSet generatedKeys = pstm.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    orderDetail.setOrderId(generatedKeys.getLong(1));
+                    boolean insertOrderDetail = OrderDetailDAO.addOrderDetail(orderDetail);
+                    if (insertOrderDetail) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
     }
 
     public static List<Order> searchOrder(Date startDate, Date endDate) throws SQLException, ClassNotFoundException {
@@ -102,7 +138,8 @@ public class OrderDAO {
         ResultSet rs = pstm.executeQuery();
         List<Order> orders = new ArrayList<Order>();
         while (rs.next()) {
-            Order order = new Order(rs.getLong("id"), rs.getTimestamp("orderAt"), rs.getBigDecimal("totalPrice"), rs.getString("description"), rs.getLong("userId"), rs.getBoolean("isDelete"));
+            Order order = new Order(rs.getLong("id"), rs.getTimestamp("orderAt").toLocalDateTime(), rs.getBigDecimal("totalPrice"), rs.getString("description"),
+                    rs.getLong("userId"), rs.getBoolean("isDelete"), rs.getString("status"));
             User user = new User();
             user.setFullName(rs.getString("usFullName"));
             user.setEmail(rs.getString("usEmail"));

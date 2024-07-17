@@ -128,30 +128,6 @@ public class OrderManagementServlet extends HttpServlet {
                     request.setAttribute("searchStartDate", LocalDate.parse(request.getParameter("searchStartDateInput"), formatter));
                     request.setAttribute("searchEndDate", LocalDate.parse(request.getParameter("searchEndDateInput"), formatter));
                     break;
-//                case "SHOW-PRODUCT-CATEGORY":
-//                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//                    Date searchStartDateInput = dateFormat.parse(request.getParameter("searchStartDateInput"));
-//                    Date searchEndDateInput = dateFormat.parse(request.getParameter("searchEndDateInput"));
-//                    request.setAttribute("Orders", OrderDAO.searchOrder(new java.sql.Date(searchStartDateInput.getTime()) , new java.sql.Date(searchEndDateInput.getTime())));
-//                    break;
-                case "DELETE":
-                    long deleteProDetailId;
-                    boolean deleteProductDetail = false;
-                    String deleteProDetailIdPara = request.getParameter("deleteId");
-                    deleteProDetailId = Long.parseLong(deleteProDetailIdPara);
-                    deleteProductDetail = ProductDetailDAO.deleteProductDetail(deleteProDetailId);
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    request.setAttribute("ProductDetails", ProductDetailDAO.getAllProductDetail());
-                    request.setAttribute("searchInput", "");
-                    request.setAttribute("searchProductIdInput", 999);
-                    if (deleteProductDetail) {
-                        request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Xoá chi tiết sản phẩm thành công");
-                    } else {
-                        request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Xoá chi tiết sản phẩm thất bại");
-                    }
-                    break;
                 default:
                     break;
             }

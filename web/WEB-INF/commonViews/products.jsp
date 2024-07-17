@@ -37,8 +37,33 @@
                     Tìm kiếm
                 </button>
             </div>
+
             <div class="container" style="margin-top: 50px">
-                <div class="border-bottom border-primary text-center"  style="margin-top: 50px">
+                <div>
+                    <span class="text-primary fs-4 fw-semibold">DANH MỤC</span>
+                    <select class="border rounded" style="margin-left: 10px; min-width: 200px; max-width: 400px; height: 40px" name="searchCategoryId" id="searchCategoryId">
+                        <c:choose>
+                            <c:when test="${999 == searchCategoryId}">
+                                <option value="999" selected="">Tất cả</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value=999>Tất cả</option>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:forEach var="item" items="${Categories}" varStatus="loop">
+                            <c:choose>
+                                <c:when test="${item.id == searchCategoryId}">
+                                    <option value="${item.id}" selected="">${item.name}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${item.id}">${item.name}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <div class="border-bottom border-primary text-center"  style="margin-top: 30px">
                     <span class="text-primary fs-4 fw-semibold">SẢN PHẨM</span>
                 </div>
                 <div class="row g-3" style="margin-top: 20px">
@@ -61,7 +86,7 @@
         <div class="modal fade" id="SearchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="searchForm" action="home" method="post">
+                    <form id="searchForm" action="product" method="post">
                         <div class="modal-header bg-primary">
                             <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -69,6 +94,9 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="searchInput" name="searchInput" hidden="">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="searchCategoryIdInput" name="searchCategoryIdInput" hidden="">
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="action" name="action" value="SEARCH" hidden="">
@@ -87,7 +115,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
-                            debugger;
                             $(document).ready(function () {
                                 $('[data-toggle="tooltip"]').tooltip();
                             });
@@ -107,6 +134,7 @@
 
                             function searchFun() {
                                 document.getElementById('searchInput').value = document.getElementById('searchTextInput').value;
+                                document.getElementById('searchCategoryIdInput').value = document.getElementById('searchCategoryId').value;
                                 document.getElementById("searchForm").submit();
                             }
         </script>    

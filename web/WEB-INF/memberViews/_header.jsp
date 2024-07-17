@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <header>
+        <header class="fixed-top">
             <div class="row align-items-center bg-primary">
                 <div class="col-4 col-sm-4 col-md-4 text-light font-italic" style="padding-left: 100px;">CSHOP MEMBER</div>
                 <div class="col-6 col-sm-6 col-md-6">
@@ -23,7 +23,10 @@
                             <a class="nav-link text-light" href="${pageContext.request.contextPath}/category">Danh mục</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="${pageContext.request.contextPath}/product">Sản phẩm</a>
+                            <a class="nav-link text-light" href="${pageContext.request.contextPath}/product/">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="${pageContext.request.contextPath}/addToCart">Giỏ hàng</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" href="${pageContext.request.contextPath}/order">Lịch sử đặt hàng</a>

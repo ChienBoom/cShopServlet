@@ -41,6 +41,10 @@ public class ProductDetail {
     public long getId() {
         return Id;
     }
+    
+    public void setId(long id){
+        this.Id = id;
+    }
 
     // Getter and Setter for Size
     public String getSize() {

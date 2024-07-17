@@ -95,7 +95,7 @@ public class ProductDetailManagementServlet extends HttpServlet {
                     // Lấy thông tin file
                     Part editPicture = request.getPart("editPicture");
                     String editFileName = "NULL";
-                    if (!editPicture.getName().equals("")) {
+                    if (editPicture.getSubmittedFileName() != null && !editPicture.getSubmittedFileName().isEmpty()) {
                         UploadService editUploadService = new UploadService();
                         editFileName = editUploadService.UploadPicture(request, editPicture);
                     }
@@ -124,10 +124,12 @@ public class ProductDetailManagementServlet extends HttpServlet {
                     request.setAttribute("searchInput", searchInput);
                     request.setAttribute("searchProductId", searchProductIdInput);
                     break;
-                case "SHOW-PRODUCT-CATEGORY":
-                    long showProCateId = Long.parseLong(request.getParameter("showProCateId"));
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getProductsByCategoryId(showProCateId));
+                case "SHOW-PRODUCT-DETAIL":
+                    long showProductId = Long.parseLong(request.getParameter("showProductId"));
+                    request.setAttribute("Products", ProductDAO.getAllProduct());
+                    request.setAttribute("ProductDetails", ProductDetailDAO.getProductDetailsByProductId(showProductId));
+                    request.setAttribute("searchInput", "");
+                    request.setAttribute("searchProductId", showProductId);
                     break;
                 case "DELETE":
                     long deleteProDetailId;

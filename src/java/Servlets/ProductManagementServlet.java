@@ -92,7 +92,7 @@ public class ProductManagementServlet extends HttpServlet {
                     // Lấy thông tin file
                     Part editPicture = request.getPart("editProPicture");
                     String editFileName = "NULL";
-                    if (!editPicture.getName().equals("")) {
+                    if (editPicture.getSubmittedFileName() != null && !editPicture.getSubmittedFileName().isEmpty()) {
                         UploadService editUploadService = new UploadService();
                         editFileName = editUploadService.UploadPicture(request, editPicture);
                     }

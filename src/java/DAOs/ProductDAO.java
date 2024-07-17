@@ -62,6 +62,27 @@ public class ProductDAO {
         }
         return products;
     }
+    
+    public static Product getProductById(long productId) throws SQLException, ClassNotFoundException {
+
+        String sql = "Select pro.*, cate.name as cateName, cate.pictureUrl as catePictureUrl, cate.numberProduct as cateNumberProduct, cate.description as cateDescription, cate.isDelete as cateIsDelete from dboProduct as pro"
+                + " join dboCategory as cate on pro.categoryId = cate.Id"
+                + " where pro.id = ? and pro.isDelete = 0 and cate.isDelete = 0";
+
+        Connection conn = ConnectionUtil.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setLong(1, productId);
+        ResultSet rs = pstm.executeQuery();
+        while (rs.next()) {
+            Product product = new Product(rs.getLong("id"), rs.getString("name"), rs.getString("pictureUrl"), rs.getInt("quantitySold"),
+                    rs.getInt("quantityStock"), rs.getString("description"), rs.getLong("categoryId"), rs.getBoolean("isDelete"));
+            Category category = new Category(rs.getLong("categoryId"), rs.getString("cateName"),
+                    rs.getString("catePictureUrl"), rs.getInt("cateNumberProduct"), rs.getString("cateDescription"), rs.getBoolean("cateIsDelete"));
+            product.setCategory(category);
+            return product;
+        }
+        return null;
+    }
 
     public static boolean addProduct(Product product) throws SQLException, ClassNotFoundException {
 
