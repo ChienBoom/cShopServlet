@@ -74,10 +74,18 @@ public class forgotPasswordServlet extends HttpServlet {
 //                session.setAttribute("MESSAGE", "Đã gửi tin nhắn về Email của bạn!");
                 response.sendRedirect(request.getContextPath() + "/login");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            dispatcher.forward(request, response);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            dispatcher.forward(request, response);
         }
     }
 

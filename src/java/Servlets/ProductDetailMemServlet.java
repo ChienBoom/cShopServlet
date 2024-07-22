@@ -83,9 +83,19 @@ public class ProductDetailMemServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
+            RequestDispatcher dispatcher;
+            if (roleUser == null) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/productDetail.jsp");
+            }
+            else if(roleUser.equals("ADMIN")){
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            }
+            else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/productDetail.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/productDetail.jsp");
             switch (action) {
                 case "SEARCH":
                     String searchInput = request.getParameter("searchInput").trim();
@@ -102,22 +112,12 @@ public class ProductDetailMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
-                request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchCategoryId", 999);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

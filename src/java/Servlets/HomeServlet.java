@@ -79,20 +79,25 @@ public class HomeServlet extends HttpServlet {
         try {
             String action = request.getParameter("action");
             RequestDispatcher dispatcher;
-            if(roleUser == null) dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/home.jsp");
-            else if(roleUser.equals("ADMIN")) dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/home.jsp");
-            else dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/home.jsp"); 
+            if (roleUser == null) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/home.jsp");
+            } else if (roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/home.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/home.jsp");
+            }
 
             switch (action) {
                 case "SEARCH":
                     String searchInput = request.getParameter("searchInput").trim();
                     request.setAttribute("Products", ProductDAO.searchProduct(searchInput, 999));
                     request.setAttribute("searchInput", searchInput);
-                    if(searchInput.equals("")){
+                    if (searchInput.equals("")) {
                         request.setAttribute("Categories", CategoryDAO.getAllCategory());
                         request.setAttribute("SEARCH", "FALSE");
+                    } else {
+                        request.setAttribute("SEARCH", "TRUE");
                     }
-                    else request.setAttribute("SEARCH", "TRUE");
                     break;
                 case "SHOW-PRODUCT-CATEGORY":
                     long showProCateId = Long.parseLong(request.getParameter("showProCateId"));
@@ -106,22 +111,12 @@ public class HomeServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/home.jsp");
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("ProductDetails", ProductDetailDAO.getAllProductDetail());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchProductIdInput", 999);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
     }
 

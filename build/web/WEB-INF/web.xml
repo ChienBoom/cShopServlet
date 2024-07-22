@@ -90,6 +90,10 @@
         <servlet-name>forgotPasswordServlet</servlet-name>
         <servlet-class>Servlets.forgotPasswordServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserNotifiServlet</servlet-name>
+        <servlet-class>Servlets.UserNotifiServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -165,6 +169,10 @@
     <servlet-mapping>
         <servlet-name>forgotPasswordServlet</servlet-name>
         <url-pattern>/forgotPasswordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserNotifiServlet</servlet-name>
+        <url-pattern>/UserNotifiServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

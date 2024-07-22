@@ -11,58 +11,32 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Thông tin tài khoản</title>
+        <title>404</title>
     </head>
-    <style>
-        .profile-image {
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto;
-        }
-    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <body class="d-flex flex-column min-vh-100">
-        <jsp:include page="_header.jsp"></jsp:include>
-            <main class="flex-fill" style="padding-top: 56px; background-color: #f5f5f5">
-            <div class="container" style="margin-top: 50px">
-                NOTFOUND
+        <section class="py-3 py-md-5 min-vh-100 d-flex justify-content-center align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
+                                <span class="display-1 fw-bold">4</span>
+                                <i class="bi bi-exclamation-circle-fill text-danger display-4"></i>
+                                <span class="display-1 fw-bold bsb-flip-h">4</span>
+                            </h2>
+                            <h3 class="h2 mb-2">Oops! You're lost.</h3>
+                            <p class="mb-5">The page you are looking for was not found.</p>
+                            <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" href="${pageContext.request.contextPath}/home" role="button">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </main>
-        <jsp:include page="_footer.jsp"></jsp:include>
-        
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        </section>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/error-404s/error-404-1/assets/css/error-404-1.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script>
-                                    debugger;
-                                    $(document).ready(function () {
-                                        $('[data-toggle="tooltip"]').tooltip();
-                                    });
-
-                                    setTimeout(function () {
-                                        // Select all alerts with the 'alert' class
-                                        var alerts = document.querySelectorAll('.alert');
-                                        alerts.forEach(function (alert) {
-                                            // Hide each alert
-                                            $(alert).alert('close');
-                                        });
-                                    }, 2000);
-                                    //
-                                    function editProfile(username, fullName, email, dob, sex, address) {
-                                        document.getElementById('editUsername').value = username;
-                                        document.getElementById('editFullName').value = fullName;
-                                        document.getElementById('editEmail').value = email;
-                                        document.getElementById('editDOB').value = dob;
-                                        document.getElementById('editSex').value = sex;
-                                        document.getElementById('editAddress').value = address;
-                                    }
-
-                                    function changeAvatar(username) {
-                                        document.getElementById('changeUsername').value = username;
-                                    }
-        </script>
     </body>
 
 </html>

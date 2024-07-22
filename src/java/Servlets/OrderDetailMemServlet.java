@@ -38,9 +38,14 @@ public class OrderDetailMemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
-//            HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
+            }
             request.setAttribute("Products", ProductDAO.getAllProduct());
             request.setAttribute("ProductDetails", ProductDetailDAO.getAllProductDetail());
             request.setAttribute("searchInput", "");
@@ -49,7 +54,7 @@ public class OrderDetailMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -60,9 +65,15 @@ public class OrderDetailMemServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
             switch (action) {
                 case "SEARCH":
                     String searchInput = request.getParameter("searchProductDetailInput").trim();
@@ -85,22 +96,12 @@ public class OrderDetailMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/orderDetail.jsp");
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("ProductDetails", ProductDetailDAO.getAllProductDetail());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchProductIdInput", 999);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

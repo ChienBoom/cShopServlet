@@ -5,7 +5,9 @@
 package Servlets;
 
 import DAOs.AccountDAO;
+import DAOs.UserDAO;
 import Models.Account;
+import Models.User;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,8 +61,10 @@ public class RegisterServlet extends HttpServlet {
                 if (createAccount) {
                     session.setAttribute("ROLE", "MEMBER");
                     RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/home.jsp");
+                    getServletContext().setAttribute("ROLE", "MEMBER");
+                    getServletContext().setAttribute("USERNAME", username);
                     request.setAttribute("MESSAGE", "Đăng ký tài khoản thành công");
-                    dispatcher.forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/userNotifi");
                 } else {
                     RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/register.jsp");
                     request.setAttribute("STATUS", "ERROR");
@@ -66,10 +72,14 @@ public class RegisterServlet extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            dispatcher.forward(request, response);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            dispatcher.forward(request, response);
         }
     }
 

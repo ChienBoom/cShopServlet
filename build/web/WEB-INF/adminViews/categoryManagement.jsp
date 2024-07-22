@@ -305,6 +305,14 @@
                                                             document.getElementById("searchCateForm").submit();
                                                         }
 
+                                                        function validateForm(value, message) {
+                                                            if (value <= 0) {
+                                                                alert(message);
+                                                                return false;
+                                                            }
+                                                            return true;
+                                                        }
+
             </script>
     </body>
 </html>

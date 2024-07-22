@@ -57,7 +57,7 @@ public class ProfileServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/profile.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -68,30 +68,39 @@ public class ProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
+            RequestDispatcher dispatcher;
+            if(roleUser == null){
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            }
+            else if(roleUser.equals("MEMBER")) dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/profile.jsp");
+            else{
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
+             
             switch (action) {
-                case "ADD":
-                    // Lấy thông tin file
-                    Part picture = request.getPart("addProPicture");
-                    UploadService uploadService = new UploadService();
-                    String fileName = uploadService.UploadPicture(request, picture);
-
-                    Product product = new Product(1, request.getParameter("addProName"), fileName,
-                            Integer.parseInt(request.getParameter("addProQuanSold")), Integer.parseInt(request.getParameter("addProQuanStock")),
-                            request.getParameter("addProDesc").trim(), Long.parseLong(request.getParameter("addProCateId")), false);
-                    boolean addCate = ProductDAO.addProduct(product);
-                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                    request.setAttribute("Products", ProductDAO.getAllProduct());
-                    if (addCate) {
-                        request.setAttribute("STATUS", "SUCCESS");
-                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thành công");
-                    } else {
-                        request.setAttribute("STATUS", "ERROR");
-                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thất bại");
-                    }
-                    break;
+//                case "ADD":
+//                    // Lấy thông tin file
+//                    Part picture = request.getPart("addProPicture");
+//                    UploadService uploadService = new UploadService();
+//                    String fileName = uploadService.UploadPicture(request, picture);
+//
+//                    Product product = new Product(1, request.getParameter("addProName"), fileName,
+//                            Integer.parseInt(request.getParameter("addProQuanSold")), Integer.parseInt(request.getParameter("addProQuanStock")),
+//                            request.getParameter("addProDesc").trim(), Long.parseLong(request.getParameter("addProCateId")), false);
+//                    boolean addCate = ProductDAO.addProduct(product);
+//                    request.setAttribute("Categories", CategoryDAO.getAllCategory());
+//                    request.setAttribute("Products", ProductDAO.getAllProduct());
+//                    if (addCate) {
+//                        request.setAttribute("STATUS", "SUCCESS");
+//                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thành công");
+//                    } else {
+//                        request.setAttribute("STATUS", "ERROR");
+//                        request.setAttribute("MESSAGE", "Thêm mới sản phẩm thất bại");
+//                    }
+//                    break;
                 case "EDIT":
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     // Lấy thông tin file
@@ -103,7 +112,8 @@ public class ProfileServlet extends HttpServlet {
                     }
                     User editUser = new User(1, request.getParameter("editFullName"), request.getParameter("editEmail"), request.getParameter("editSex"),
                             request.getParameter("editAddress"), editFileName, dateFormat.parse(request.getParameter("editDOB")), 1);
-                    editUser.setUsername(request.getParameter("editUsername"));
+//                    editUser.setUsername(request.getParameter("editUsername"));userNameGlo
+                    editUser.setUsername(userNameGlo);
                     boolean editUs = UserDAO.updateProfile(editUser);
 
                     if (editUs) {
@@ -139,20 +149,12 @@ public class ProfileServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/profile.jsp");
-                request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

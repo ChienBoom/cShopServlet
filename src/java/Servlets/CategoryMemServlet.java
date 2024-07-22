@@ -38,7 +38,6 @@ public class CategoryMemServlet extends HttpServlet {
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
         String roleUser = (String) getServletContext().getAttribute("ROLE");
-        String pathInfo = request.getPathInfo();
         try {
             RequestDispatcher dispatcher;
             if (roleUser == null) {
@@ -78,22 +77,12 @@ public class CategoryMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
-                request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchCategoryId", 999);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

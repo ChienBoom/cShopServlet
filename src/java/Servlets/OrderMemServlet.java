@@ -54,9 +54,14 @@ public class OrderMemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
-//            HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/order.jsp");
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/order.jsp");
+            }
             User user = UserDAO.getUserByUsername(userNameGlo);
             request.setAttribute("Orders", OrderDAO.getOrderByUserId(user.getId()));
             request.setAttribute("searchStartDate", LocalDate.now().minusMonths(1));
@@ -65,7 +70,7 @@ public class OrderMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/order.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -80,7 +85,12 @@ public class OrderMemServlet extends HttpServlet {
         try {
             String action = request.getParameter("action");
             HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/order.jsp");
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("ADMIN")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/memberViews/order.jsp");
+            }
             switch (action) {
                 case "ADD":
                     String addUsername = request.getParameter("orderUsername");
@@ -157,22 +167,12 @@ public class OrderMemServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("ProductDetails", ProductDetailDAO.getAllProductDetail());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchProductIdInput", 999);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

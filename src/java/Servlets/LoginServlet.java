@@ -64,17 +64,24 @@ public class LoginServlet extends HttpServlet {
             } else {
                 getServletContext().setAttribute("ROLE", account.getRole());
                 getServletContext().setAttribute("USERNAME", account.getUsername());
-//                session.setAttribute("ROLE", account.getRole());
                 if (account.getRole().equals("ADMIN")) {
                     response.sendRedirect(request.getContextPath() + "/home");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/home");
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            dispatcher.forward(request, response);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            dispatcher.forward(request, response);
         }
     }
 

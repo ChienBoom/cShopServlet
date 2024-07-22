@@ -39,8 +39,6 @@ public class LogoutServlet extends HttpServlet {
         session.invalidate();
         getServletContext().removeAttribute("ROLE");
         getServletContext().removeAttribute("USERNAME");
-//        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/home.jsp");
-//        dispatcher.forward(request, response);
         response.sendRedirect(request.getContextPath() + "/home");
     }
 
@@ -51,8 +49,6 @@ public class LogoutServlet extends HttpServlet {
         session.invalidate();
         getServletContext().removeAttribute("ROLE");
         getServletContext().removeAttribute("USERNAME");
-//        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/home.jsp");
-//        dispatcher.forward(request, response);
         response.sendRedirect(request.getContextPath() + "/home");
     }
 

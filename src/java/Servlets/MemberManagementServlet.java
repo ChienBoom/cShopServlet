@@ -38,18 +38,24 @@ public class MemberManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
             HttpSession session = request.getSession();
             session.invalidate();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("MEMBER")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
+            }
             List<User> users = UserDAO.findUserMember();
             request.setAttribute("Users", users);
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
-             request.setAttribute("USERNAME", userNameGlo);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
 
@@ -59,12 +65,17 @@ public class MemberManagementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
             HttpSession session = request.getSession();
             session.invalidate();
-
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("MEMBER")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
             switch (action) {
                 case "BAN":
                     long banAccountId;
@@ -119,20 +130,12 @@ public class MemberManagementServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/memberManagement.jsp");
-                List<User> users = UserDAO.findUserMember();
-                request.setAttribute("Users", users);
-                request.setAttribute("STATUS", "ERROR");
-                request.setAttribute("MESSAGE", "Lỗi hệ thống");
-                request.setAttribute("USERNAME", userNameGlo);
-                dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(e);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
+            request.setAttribute("STATUS", "ERROR");
+            request.setAttribute("MESSAGE", "Lỗi hệ thống");
+            request.setAttribute("USERNAME", userNameGlo);
+            dispatcher.forward(request, response);
         }
 
     }

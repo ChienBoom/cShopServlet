@@ -64,6 +64,25 @@ public class UserDAO {
         }
         return null;
     }
+    
+    public static boolean insertProfile(User user) throws SQLException, ClassNotFoundException {
+
+        String sql = "insert into dboUser(fullName, email, sex, address, pictureUrl, dOB, accountId)" //
+                    + " values(?, ?, ?, ?, ?, ?, (select id from dboAccount where username = ?))";
+            Connection conn = ConnectionUtil.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, user.getFullName());
+            pstm.setString(2, user.getEmail());
+            pstm.setString(3, user.getSex());
+            pstm.setString(4, user.getAddress());
+            pstm.setString(5, user.getPictureUrl());
+            pstm.setDate(6, new java.sql.Date(user.getDOB().getTime()));
+            pstm.setString(7, user.getUsername());
+
+            int rowsInserted = pstm.executeUpdate();
+
+            return rowsInserted > 0;
+    }
 
     public static boolean updateProfile(User user) throws SQLException, ClassNotFoundException {
 

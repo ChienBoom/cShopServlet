@@ -41,9 +41,15 @@ public class ProductManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
-//            HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("MEMBER")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            }
             request.setAttribute("Categories", CategoryDAO.getAllCategory());
             request.setAttribute("Products", ProductDAO.getAllProduct());
             request.setAttribute("searchCategoryId", 999);
@@ -51,7 +57,7 @@ public class ProductManagementServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -62,9 +68,15 @@ public class ProductManagementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
+            RequestDispatcher dispatcher;
+            if (roleUser == null || roleUser.equals("MEMBER")) {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            } else {
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
             switch (action) {
                 case "ADD":
                     // Lấy thông tin file
@@ -152,22 +164,12 @@ public class ProductManagementServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            try {
-                System.out.println(e);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/productManagement.jsp");
-                request.setAttribute("Categories", CategoryDAO.getAllCategory());
-                request.setAttribute("Products", ProductDAO.getAllProduct());
-                request.setAttribute("searchInput", "");
-                request.setAttribute("searchCategoryId", 999);
+            System.out.println(e);
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
                 request.setAttribute("STATUS", "ERROR");
                 request.setAttribute("MESSAGE", "Lỗi hệ thống");
                 request.setAttribute("USERNAME", userNameGlo);
                 dispatcher.forward(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MemberManagementServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
     }

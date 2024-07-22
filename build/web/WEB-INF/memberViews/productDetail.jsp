@@ -66,7 +66,7 @@
                                 </c:forEach>
                             </select>
                             <div style="margin-top: 10px"><span class="fw-medium">Số lượng: </span>
-                                <input type="number" value="1" class="border rounded"
+                                <input type="number" value="1" min="1" class="border rounded"
                                        style="min-width: 100px; max-width: 100px; height: 50px;" id="quantity" name="quantity"/>
                             </div>
 
@@ -87,7 +87,7 @@
         <div class="modal fade" id="AddToCartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="addToCartForm" action="/cShop/addToCart" method="post">
+                    <form id="addToCartForm" action="/cShop/addToCart" method="post" >
                         <div class="modal-header bg-primary">
                             <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">THÔNG BÁO</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -119,42 +119,53 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
-                                            setTimeout(function () {
-                                                // Select all alerts with the 'alert' class
-                                                var alerts = document.querySelectorAll('.alert');
-                                                alerts.forEach(function (alert) {
-                                                    // Hide each alert
-                                                    $(alert).alert('close');
-                                                });
-                                            }, 2000);
+                        setTimeout(function () {
+                            // Select all alerts with the 'alert' class
+                            var alerts = document.querySelectorAll('.alert');
+                            alerts.forEach(function (alert) {
+                                // Hide each alert
+                                $(alert).alert('close');
+                            });
+                        }, 2000);
 
-                                            function ChangeProDetailSel() {
-                                                var selectElement = document.getElementById('selectProductDetail');
-                                                var selectedValue = selectElement.value;
+                        function ChangeProDetailSel() {
+                            var selectElement = document.getElementById('selectProductDetail');
+                            var selectedValue = selectElement.value;
 
-                                                var parts = selectedValue.split('-');
-                                                var price = parts[1];
+                            var parts = selectedValue.split('-');
+                            var price = parts[1];
 
-                                                var priceDisplayElement = document.getElementById('price');
-                                                priceDisplayElement.textContent = price + " VNĐ";
-                                            }
+                            var priceDisplayElement = document.getElementById('price');
+                            priceDisplayElement.textContent = price + " VNĐ";
+                        }
 
-                                            function addToCart() {
-                                                var selectElement = document.getElementById('selectProductDetail');
-                                                var selectedValue = selectElement.value;
+                        function addToCart() {
+                            var selectElement = document.getElementById('selectProductDetail');
+                            var selectedValue = selectElement.value;
 
-                                                var parts = selectedValue.split('-');
-                                                var productDetailId = parts[0];
+                            var parts = selectedValue.split('-');
+                            var productDetailId = parts[0];
 
-                                                document.getElementById('productIdInput').value = document.getElementById('productId').value;
-                                                document.getElementById('productDetailIdInput').value = productDetailId;
-                                                document.getElementById('quantityInput').value = document.getElementById('quantity').value;
-                                                document.getElementById("addToCartForm").submit();
-                                            }
+                            document.getElementById('productIdInput').value = document.getElementById('productId').value;
+                            document.getElementById('productDetailIdInput').value = productDetailId;
+                            document.getElementById('quantityInput').value = document.getElementById('quantity').value;
+                            if(validateForm()){
+                                document.getElementById("addToCartForm").submit();
+                            }
+                        }
 
-                                            document.addEventListener('DOMContentLoaded', (event) => {
-                                                ChangeProDetailSel(); // Gọi hàm để hiển thị giá trị price của item được chọn đầu tiên
-                                            });
+                        document.addEventListener('DOMContentLoaded', (event) => {
+                            ChangeProDetailSel(); // Gọi hàm để hiển thị giá trị price của item được chọn đầu tiên
+                        });
+
+                        function validateForm() {
+                            var x = document.forms["addToCartForm"]["quantityInput"].value;
+                            if (x <= 0) {
+                                alert("Yêu cầu nhập số lượng sản phẩm > 0");
+                                return false;
+                            }
+                            return true;
+                        }
         </script>
     </body>
 

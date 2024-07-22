@@ -49,9 +49,15 @@ public class OrderManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
-//            HttpSession session = request.getSession();
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
+            RequestDispatcher dispatcher;
+            if(roleUser == null || roleUser.equals("MEMBER")){
+                dispatcher  = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            }
+            else{
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
+            }
             request.setAttribute("Orders", OrderDAO.getAllOrder());
             request.setAttribute("searchStartDate", LocalDate.now().minusMonths(1));
             request.setAttribute("searchEndDate", LocalDate.now());
@@ -59,7 +65,7 @@ public class OrderManagementServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/error.jsp");
             request.setAttribute("USERNAME", userNameGlo);
             dispatcher.forward(request, response);
         }
@@ -70,9 +76,16 @@ public class OrderManagementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userNameGlo = (String) getServletContext().getAttribute("USERNAME");
+        String roleUser = (String) getServletContext().getAttribute("ROLE");
         try {
+            RequestDispatcher dispatcher;
+            if(roleUser == null || roleUser.equals("MEMBER")){
+                dispatcher  = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/notfound.jsp");
+            }
+            else{
+                dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
+            }
             String action = request.getParameter("action");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/adminViews/orderManagement.jsp");
             switch (action) {
                 case "ADD":
                     // Lấy thông tin file
