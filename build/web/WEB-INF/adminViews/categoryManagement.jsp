@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="assets/logo/logo.jpg">
         <title>Quản lý danh mục</title>
     </head>
     <!--<link rel="stylesheet" href="assets/css/main.css">-->
@@ -146,7 +147,7 @@
             </div>
 
             <!-- Add Modal -->
-            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateAddCategory()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="categoryManagement" method="post" enctype="multipart/form-data">
@@ -188,7 +189,7 @@
             </div>
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateEditCategory()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="categoryManagement" method="post" enctype="multipart/form-data">
@@ -304,8 +305,20 @@
                                                             document.getElementById('searchCategoryInput').value = document.getElementById('searchCategory').value;
                                                             document.getElementById("searchCateForm").submit();
                                                         }
+                                                        
+                                                        function validateAddCategory() {
+                                                            var number = document.getElementById('addNumProCate').value;
+                                                            if(validateNumber(number, "Vui lòng nhập số lượng sản phẩm >0")) return true
+                                                            return false;
+                                                        }
+                                                        
+                                                        function validateEditCategory() {
+                                                            var number = document.getElementById('editCateName').value;
+                                                            if(validateNumber(number, "Vui lòng nhập số lượng sản phẩm >0")) return true
+                                                            return false;
+                                                        }
 
-                                                        function validateForm(value, message) {
+                                                        function validateNumber(value, message) {
                                                             if (value <= 0) {
                                                                 alert(message);
                                                                 return false;

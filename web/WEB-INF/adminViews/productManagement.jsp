@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="assets/logo/logo.jpg">
         <title>Quản lý sản phẩm</title>
     </head>
     <!--<link rel="stylesheet" href="assets/css/main.css">-->
@@ -147,7 +148,7 @@
             </div>
 
             <!-- Add Modal -->
-            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateAddProduct()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="productManagement" method="post" enctype="multipart/form-data">
@@ -201,7 +202,7 @@
             </div>
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateEditProduct()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="productManagement" method="post" enctype="multipart/form-data">
@@ -350,6 +351,30 @@
                                                             document.getElementById('searchProductInput').value = document.getElementById('searchProduct').value;
                                                             document.getElementById('searchCategoryIdInput').value = document.getElementById('searchCategoryId').value;
                                                             document.getElementById("searchProForm").submit();
+                                                        }
+                                                        
+                                                        function validateAddCategory() {
+                                                            var quanSold = document.getElementById('addProQuanSold').value;
+                                                            var quanStock = document.getElementById('addProQuanStock').value;
+                                                            if(!validateNumber(quanSold, "Vui lòng nhập số lượng sản phẩm đã bán >=0")) return false
+                                                            if(!validateNumber(quanStock, "Vui lòng nhập số lượng sản phẩm còn trong kho >=0")) return false
+                                                            return true;
+                                                        }
+                                                        
+                                                        function validateEditProduct() {
+                                                            var quanSold = document.getElementById('editProQuanSold').value;
+                                                            var quanStock = document.getElementById('editProQuanStock').value;
+                                                            if(!validateNumber(quanSold, "Vui lòng nhập số lượng sản phẩm đã bán >=0")) return false
+                                                            if(!validateNumber(quanStock, "Vui lòng nhập số lượng sản phẩm còn trong kho >=0")) return false
+                                                            return true;
+                                                        }
+                                                        
+                                                        function validateNumber(value, message) {
+                                                            if (value < 0) {
+                                                                alert(message);
+                                                                return false;
+                                                            }
+                                                            return true;
                                                         }
             </script>
     </body>

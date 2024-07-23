@@ -9,6 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="icon" type="image/x-icon" href="assets/logo/logo.jpg">
         <title>Đăng ký</title>
     </head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -22,7 +23,7 @@
                             <h3>Đăng Ký</h3>
                         </div>
                         <div class="card-body">
-                            <form action="register" method="post">
+                            <form action="register" method="post" onSubmit="return validateRegister()">
                                 <div class="form-group">
                                     <label for="username">Tên tài khoản</label>
                                     <input type="text" class="form-control" id="username" name="username" required>
@@ -41,7 +42,7 @@
                                         Đã có tài khoản. Đi đăng nhập
                                     </a>
                                 </div>
-                                
+
 
                             </form>
                             <% if (request.getAttribute("STATUS") == "USERNAME-EXIS") {%>
@@ -64,18 +65,55 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const showPasswordCheckbox = document.getElementById('showPassword');
-                const passwordInput = document.getElementById('password');
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const showPasswordCheckbox = document.getElementById('showPassword');
+                                    const passwordInput = document.getElementById('password');
 
-                showPasswordCheckbox.addEventListener('change', function () {
-                    if (showPasswordCheckbox.checked) {
-                        passwordInput.type = 'text';
-                    } else {
-                        passwordInput.type = 'password';
-                    }
-                });
-            });
+                                    showPasswordCheckbox.addEventListener('change', function () {
+                                        if (showPasswordCheckbox.checked) {
+                                            passwordInput.type = 'text';
+                                        } else {
+                                            passwordInput.type = 'password';
+                                        }
+                                    });
+                                });
+
+                                function validateRegister() {
+                                    var password = document.getElementById('password').value;
+                                    if (!validatePassword(password))return false
+                                    return true;
+                                }
+
+                                function validatePassword(password) {
+                                    const minLength = 8;
+                                    const hasUpperCase = /[A-Z]/.test(password);
+                                    const hasLowerCase = /[a-z]/.test(password);
+                                    const hasNumber = /[0-9]/.test(password);
+                                    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+                                    if (password.length < minLength) {
+                                        alert('Mật khẩu phải có ít nhất 8 ký tự.');
+                                        return false;
+                                    }
+                                    if (!hasUpperCase) {
+                                        alert('Mật khẩu phải chứa ít nhất một chữ cái viết hoa.');
+                                        return false;
+                                    }
+                                    if (!hasLowerCase) {
+                                        alert('Mật khẩu phải chứa ít nhất một chữ cái viết thường.');
+                                        return false;
+                                    }
+                                    if (!hasNumber) {
+                                        alert('MMật khẩu phải chứa ít nhất một chữ số.');
+                                        return false;
+                                    }
+                                    if (!hasSpecialChar) {
+                                        alert('Mật khẩu phải chứa ít nhất một ký tự đặc biệt.');
+                                        return false;
+                                    }
+
+                                    return true;
+                                }
         </script>
     </body>
 </html>

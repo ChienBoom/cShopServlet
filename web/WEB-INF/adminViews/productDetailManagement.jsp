@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="assets/logo/logo.jpg">
         <title>Quản lý chi tiết sản phẩm</title>
     </head>
     <!--<link rel="stylesheet" href="assets/css/main.css">-->
@@ -154,7 +155,7 @@
             </div>
 
             <!-- Add Modal -->
-            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateAddProductDetail()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="productDetailManagement" method="post" enctype="multipart/form-data">
@@ -216,7 +217,7 @@
             </div>
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onSubmit="return validateEditProductDetail()">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="productDetailManagement" method="post" enctype="multipart/form-data">
@@ -348,6 +349,34 @@
                                                             document.getElementById('searchProductDetailInput').value = document.getElementById('searchProductDetail').value;
                                                             document.getElementById('searchProductIdInput').value = document.getElementById('searchProductId').value;
                                                             document.getElementById("searchProDetailForm").submit();
+                                                        }
+                                                        
+                                                        function validateAddProductDetail() {
+                                                            var size = document.getElementById('addSize').value;
+                                                            var quanSold = document.getElementById('addQuanSold').value;
+                                                            var quanStock = document.getElementById('addQuanStock').value;
+                                                            if(!validateNumber(size, "Vui lòng nhập kích thước chi tiết sản phẩm đã bán >0"), 1) return false
+                                                            if(!validateNumber(quanSold, "Vui lòng nhập số lượng chi tiết sản phẩm đã bán >=0"),0) return false
+                                                            if(!validateNumber(quanStock, "Vui lòng nhập số lượng chi tiết sản phẩm còn trong kho >=0"),0) return false
+                                                            return true;
+                                                        }
+                                                        
+                                                        function validateEditProductDetail() {
+                                                            var size = document.getElementById('editSize').value;
+                                                            var quanSold = document.getElementById('editQuanSold').value;
+                                                            var quanStock = document.getElementById('editQuanStock').value;
+                                                            if(!validateNumber(size, "Vui lòng nhập kích thước chi tiết sản phẩm đã bán >0"), 1) return false
+                                                            if(!validateNumber(quanSold, "Vui lòng nhập số lượng chi tiết sản phẩm đã bán >=0"),0) return false
+                                                            if(!validateNumber(quanStock, "Vui lòng nhập số lượng chi tiết sản phẩm còn trong kho >=0"),0) return false
+                                                            return true;
+                                                        }
+                                                        
+                                                        function validateNumber(value, message, compareValue) {
+                                                            if (value < compareValue) {
+                                                                alert(message);
+                                                                return false;
+                                                            }
+                                                            return true;
                                                         }
             </script>
     </body>
