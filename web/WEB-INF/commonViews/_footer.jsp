@@ -27,24 +27,24 @@
                             <div class="row">
                                 <div class="col-4 col-sm-4 col-md-4 text-center">
                                     <a href="" class="text-primary">Chăm sóc khách hàng</a></br>
-                                    <a href="" class="text-primary">Chăm sóc khách hàng</a></br>
-                                    <a href="" class="text-primary">Chăm sóc khách hàng</a></br>
-                                    <a href="" class="text-primary">Chăm sóc khách hàng</a></br>
-                                    <a href="" class="text-primary">Chăm sóc khách hàng</a></br>
+                                    <a href="" class="text-primary">Gmail: chop@gmail.com</a></br>
+                                    <a href="" class="text-primary">Facebook: CShop-FaceBook</a></br>
+                                    <a href="" class="text-primary">SDT: 0978888666</a></br>
+                                    <a href="" class="text-primary">Địa chỉ: Cầu Giấy - Hà Nội</a></br>
                                 </div>
                                 <div class="col-4 col-sm-4 col-md-4 text-center">
-                                    <a href="" class="text-primary">Thanh toán</a></br>
-                                    <a href="" class="text-primary">Thanh toán</a></br>
-                                    <a href="" class="text-primary">Thanh toán</a></br>
-                                    <a href="" class="text-primary">Thanh toán</a></br>
-                                    <a href="" class="text-primary">Thanh toán</a></br>
+                                    <a href="" class="text-primary">Theo dõi CShop</a></br>
+                                    <a href="" class="text-primary">Gmail: chop@gmail.com</a></br>
+                                    <a href="" class="text-primary">Facebook: CShop-FaceBook</a></br>
+                                    <a href="" class="text-primary">SDT: 0978888666</a></br>
+                                    <a href="" class="text-primary">Địa chỉ: Cầu Giấy - Hà Nội</a></br>
                                 </div>
                                 <div class="col-4 col-sm-4 col-md-4 text-center">
-                                    <a href="" class="text-primary">Theo dõi Lars Travel</a></br>
-                                    <a href="" class="text-primary">Theo dõi Lars Travel</a></br>
-                                    <a href="" class="text-primary">Theo dõi Lars Travel</a></br>
-                                    <a href="" class="text-primary">Theo dõi Lars Travel</a></br>
-                                    <a href="" class="text-primary">Theo dõi Lars Travel</a></br>
+                                    <a href="" class="text-primary">Uy tín</a></br>
+                                    <a href="" class="text-primary">Gmail: chop@gmail.com</a></br>
+                                    <a href="" class="text-primary">Facebook: CShop-FaceBook</a></br>
+                                    <a href="" class="text-primary">SDT: 0978888666</a></br>
+                                    <a href="" class="text-primary">Địa chỉ: Cầu Giấy - Hà Nội</a></br>
                                 </div>
                             </div>
                         </div>

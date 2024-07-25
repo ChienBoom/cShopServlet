@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/MyProject/Java/cShop/web/WEB-INF/adminViews/productManagement.jsp</file>
-            <file>file:/E:/MyProject/Java/cShop/web/WEB-INF/commonViews/register.jsp</file>
-            <file>file:/E:/MyProject/Java/cShop/web/WEB-INF/adminViews/categoryManagement.jsp</file>
-            <file>file:/E:/MyProject/Java/cShop/web/WEB-INF/adminViews/productDetailManagement.jsp</file>
-            <file>file:/E:/MyProject/Java/cShop/web/WEB-INF/adminViews/memberManagement.jsp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

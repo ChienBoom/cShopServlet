@@ -49,10 +49,10 @@
                             </c:forEach>
                         </select>
                         <div style="margin-top: 10px"><span class="fw-medium">Số lượng: </span>
-                            <input type="number" value="1" class="border rounded"
-                               style="min-width: 100px; max-width: 100px; height: 50px;" id="quantity" name="quantity"/>
+                            <input type="number" value="1" min="1" class="border rounded"
+                                   style="min-width: 100px; max-width: 100px; height: 50px;" id="quantity" name="quantity"/>
                         </div>
-                        
+
                         <div class="fs-3 fst-italic fw-semibold text-primary" style="margin-top: 10px" id="price"></div>
                         <div style="margin-top: 30px">
                             <button type="button" class="btn btn-outline-primary" style="width: 200px; height: 50px"
@@ -65,7 +65,7 @@
             </div>
         </main>
         <jsp:include page="_footer.jsp"></jsp:include>
-        
+
         <!-- add to cart Modal -->
         <div class="modal fade" id="AddToCartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -94,35 +94,46 @@
                 </div>
             </div>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
-                                    function ChangeProDetailSel() {
-                                        var selectElement = document.getElementById('selectProductDetail');
-                                        var selectedValue = selectElement.value;
+                                        function ChangeProDetailSel() {
+                                            var selectElement = document.getElementById('selectProductDetail');
+                                            var selectedValue = selectElement.value;
 
-                                        var parts = selectedValue.split('-');
-                                        var price = parts[1];
+                                            var parts = selectedValue.split('-');
+                                            var price = parts[1];
 
-                                        var priceDisplayElement = document.getElementById('price');
-                                        priceDisplayElement.textContent = price + " VNĐ";
-                                    }
-                                    
-                                    function addToCart() {
-                                        var selectElement = document.getElementById('selectProductDetail');
-                                        var selectedValue = selectElement.value;
+                                            var priceDisplayElement = document.getElementById('price');
+                                            priceDisplayElement.textContent = price + " VNĐ";
+                                        }
 
-                                        var parts = selectedValue.split('-');
-                                        var productDetailId = parts[0];
-                                        
-                                        document.getElementById('productDetailIdInput').value = productDetailId;
-                                        document.getElementById('quantityInput').value = document.getElementById('quantity').value;
-                                        document.getElementById("addToCartForm").submit();
-                                    }
+                                        function addToCart() {
+                                            var selectElement = document.getElementById('selectProductDetail');
+                                            var selectedValue = selectElement.value;
 
-                                    document.addEventListener('DOMContentLoaded', (event) => {
-                                        ChangeProDetailSel(); // Gọi hàm để hiển thị giá trị price của item được chọn đầu tiên
-                                    });
+                                            var parts = selectedValue.split('-');
+                                            var productDetailId = parts[0];
+
+                                            document.getElementById('productDetailIdInput').value = productDetailId;
+                                            document.getElementById('quantityInput').value = document.getElementById('quantity').value;
+                                            if (validateForm()) {
+                                                document.getElementById("addToCartForm").submit();
+                                            }
+                                        }
+
+                                        document.addEventListener('DOMContentLoaded', (event) => {
+                                            ChangeProDetailSel(); // Gọi hàm để hiển thị giá trị price của item được chọn đầu tiên
+                                        });
+
+                                        function validateForm() {
+                                            var x = document.forms["addToCartForm"]["quantityInput"].value;
+                                            if (x <= 0) {
+                                                alert("Yêu cầu nhập số lượng sản phẩm > 0");
+                                                return false;
+                                            }
+                                            return true;
+                                        }
         </script>
     </body>
 

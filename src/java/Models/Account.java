@@ -64,7 +64,7 @@ public class Account {
     }
 
     // Getter and Setter for IsActive
-    public boolean isIsActive() {
+    public boolean getIsActive() {
         return IsActive;
     }
 
@@ -73,7 +73,7 @@ public class Account {
     }
 
     // Getter and Setter for IsDelete
-    public boolean isIsDelete() {
+    public boolean getIsDelete() {
         return IsDelete;
     }
 

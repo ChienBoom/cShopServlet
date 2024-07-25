@@ -62,6 +62,13 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("MESSAGE", "Tài khoản hoặc mật khẩu không chính xác!");
                 dispatcher.forward(request, response);
             } else {
+                if (!account.getIsActive()) {
+                    RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/commonViews/login.jsp");
+                    request.setAttribute("STATUS", "ERROR");
+                    request.setAttribute("MESSAGE", "Tài khoản của bạn đã bị khoá!");
+                    dispatcher.forward(request, response);
+                    return;
+                }
                 getServletContext().setAttribute("ROLE", account.getRole());
                 getServletContext().setAttribute("USERNAME", account.getUsername());
                 if (account.getRole().equals("ADMIN")) {
